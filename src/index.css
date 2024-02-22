@@ -1,0 +1,21 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+
+@media only screen and (max-width:992px){
+  body {
+    flex-direction: column-reverse;
+  }
+  #root {
+    flex-direction: column-reverse;
+  }
+  /* .sidebar {
+    height: 150px;
+  } */
+}
