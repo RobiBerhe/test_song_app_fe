@@ -6,8 +6,13 @@ export interface Song {
     genre: string
 }
 
+export type SongListPagination= {
+    hasNext:boolean;
+    hasPrev:boolean;
+}
 export interface SongState {
     songList: Song[],
+    songsListPagination:SongListPagination,
     isLoading:boolean,
     errors:string[],
     songsCount?:number,

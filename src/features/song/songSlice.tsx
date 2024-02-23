@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { SONGS, Song, SongState } from "./types";
+import { SONGS, Song, SongListPagination, SongState } from "./types";
 
 
 
@@ -19,14 +19,17 @@ const initialState: SongState = {
         // { title: "k", artist: "abebe", album: "aa", genre: "pop" }, 
     ],
     isLoading: false,
-    errors: []
+    errors: [],
+    songsListPagination:{
+        hasNext:false,
+        hasPrev:false
+    }
 }
 export const songSlice = createSlice({
     name: SONGS,
     initialState,
     reducers: {
         addSong: (state, _action: PayloadAction<Song>) => {
-            // state.songList.push(action.payload);
             state.isLoading = true;
             state.errors = [];
         },
@@ -62,7 +65,7 @@ export const songSlice = createSlice({
             state.isLoading = false;
             state.errors = action.payload
         },
-        getSongsAction: (state) => {
+        getSongsAction: (state,_action:PayloadAction<{limit:number,page:number}>) => {
             state.isLoading = true;
             state.errors = [];
         },
@@ -94,6 +97,9 @@ export const songSlice = createSlice({
         },
         getArtistsCountSuccess: (state,action:PayloadAction<number>) => {
             state.artistsCount = action.payload;
+        },
+        setSongsListPagination:(state,action:PayloadAction<SongListPagination>)=>{
+            state.songsListPagination = action.payload;
         }
     },
 
@@ -110,6 +116,7 @@ export const {
     getSongsCount,getSongsCountSuccess,
     getGenersCountSuccess,getAlbumsCount,getAlbumsCountSuccess,
     getArtistsCount,getArtistsCountSuccess,getGenersCount,
+    setSongsListPagination
 } = songSlice.actions
 
 export default songSlice.reducer;

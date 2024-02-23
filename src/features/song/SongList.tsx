@@ -14,9 +14,9 @@ import EditSong from "./EditSong"
 
 
 
-const filterVisibleSongs = (list: Song[], currentIndex: number, endIndex: number) => {
-    return list.slice(currentIndex, endIndex);
-}
+// const filterVisibleSongs = (list: Song[], currentIndex: number, endIndex: number) => {
+//     return list.slice(currentIndex, endIndex);
+// }
 
 
 const sortSongs = (list:Song[],sortBy:string)=>{
@@ -33,39 +33,43 @@ const sortSongs = (list:Song[],sortBy:string)=>{
 
 
 const SongList = () => {
-    const songList = useAppSelector((state) => state.song.songList)
+    const {songList,songsListPagination} = useAppSelector((state) => state.song)
     const dispatch = useAppDispatch();
     const [showSongLength, setShowLength] = useState<number>(5);
-    const [nextStop, setNextStop] = useState<number>(showSongLength); //defaults to the no of shown songs
-    const [totalSeen,setTotalSeen] = useState<number>(showSongLength); //defaults to the no of shown songs
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
+    // const [nextStop, setNextStop] = useState<number>(showSongLength); //defaults to the no of shown songs
+    // const [totalSeen,setTotalSeen] = useState<number>(showSongLength); //defaults to the no of shown songs
+    // const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [sortBy,setSortBy] = useState<string>("");
     const [deleteModalState,setDeleteModalState] = useState<boolean>(false);
     const [editModalState,setEditModalState] = useState<boolean>(false);
     const [currentSelectedSong,setCurrentSelectedSong] = useState<Song>();
-    const visibleSongs = useMemo(() => filterVisibleSongs(songList, currentIndex, nextStop), [nextStop, currentIndex,showSongLength,songList])
-    const sortedSongs = useMemo(()=> sortSongs(visibleSongs,sortBy),[visibleSongs,sortBy]);
+    // const visibleSongs = useMemo(() => filterVisibleSongs(songList, currentIndex, nextStop), [nextStop, currentIndex,showSongLength,songList])
+    // const sortedSongs = useMemo(()=> sortSongs(visibleSongs,sortBy),[visibleSongs,sortBy]);
+    const sortedSongs = useMemo(()=> sortSongs(songList,sortBy),[songList,sortBy]);
 
 
     const onSelectListLength = (ev: React.ChangeEvent<HTMLSelectElement>) => {
         setShowLength(Number.parseInt(ev.target.value));
-        setNextStop(Number.parseInt(ev.target.value));
-        setTotalSeen(Number.parseInt(ev.target.value))
-        setCurrentIndex(0);
+        // setNextStop(Number.parseInt(ev.target.value));
+        // setTotalSeen(Number.parseInt(ev.target.value))
+        // setCurrentIndex(0);
     }
 
     const onNext = () => {
-        setCurrentIndex(totalSeen);
-        setTotalSeen((prevTotalSeen)=> prevTotalSeen+showSongLength);
-        setNextStop((prevNextStop) => prevNextStop + showSongLength);
+        // setCurrentIndex(totalSeen);
+        // setTotalSeen((prevTotalSeen)=> prevTotalSeen+showSongLength);
+        // setNextStop((prevNextStop) => prevNextStop + showSongLength);
+        setPage((prevPage)=> prevPage+1);
     }
 
     const onPrev = () => {
-        const nxt = totalSeen-showSongLength;
-        const current = nxt-showSongLength;
-        setCurrentIndex(current);
-        setTotalSeen((prevTotalSeen)=> prevTotalSeen-showSongLength);
-        setNextStop(nxt);
+        // const nxt = totalSeen-showSongLength;
+        // const current = nxt-showSongLength;
+        // setCurrentIndex(current);
+        // setTotalSeen((prevTotalSeen)=> prevTotalSeen-showSongLength);
+        // setNextStop(nxt);
+        setPage((prevPage)=> prevPage-1);
     }
 
     const handleEdit = (i:number)=>{
@@ -79,8 +83,8 @@ const SongList = () => {
     }
 
     useEffect(()=>{
-        dispatch(getSongsAction());
-    },[])
+        dispatch(getSongsAction({limit:showSongLength,page:page}));
+    },[showSongLength,page])
 
     return (
         <>
@@ -121,12 +125,14 @@ const SongList = () => {
                         <option value={25}>25</option>
                         <option value={35}>35</option>
                     </select>
-                    <Button disabled={totalSeen == showSongLength} onClick={()=> onPrev()} m={5}>Prev</Button>
-                    <Button disabled={totalSeen >= songList.length} onClick={() => onNext()} m={5}>Next</Button>
+                    {/* <Button disabled={totalSeen == showSongLength} onClick={()=> onPrev()} m={5}>Prev</Button>
+                    <Button disabled={totalSeen >= songList.length} onClick={() => onNext()} m={5}>Next</Button> */}
+                    <Button disabled={!songsListPagination.hasPrev} onClick={()=> onPrev()} m={5}>Prev</Button>
+                    <Button disabled={!songsListPagination.hasNext} onClick={() => onNext()} m={5}>Next</Button>
                 </div>
             </Box>
-            <Modal isOpen={deleteModalState} children={<DeleteSong song={currentSelectedSong ? currentSelectedSong : undefined} onClose={()=> {setDeleteModalState(false); dispatch(getSongsAction())}}/>}/>
-            <Modal isOpen={editModalState} children={<EditSong song={currentSelectedSong ? currentSelectedSong : undefined} onClose={()=> {setEditModalState(false); dispatch(getSongsAction())}}/>}/>
+            <Modal isOpen={deleteModalState} children={<DeleteSong song={currentSelectedSong ? currentSelectedSong : undefined} onClose={()=> {setDeleteModalState(false); dispatch(getSongsAction({limit:showSongLength,page:page}))}}/>}/>
+            <Modal isOpen={editModalState} children={<EditSong song={currentSelectedSong ? currentSelectedSong : undefined} onClose={()=> {setEditModalState(false); dispatch(getSongsAction({limit:showSongLength,page:page}))}}/>}/>
         </>
 
     )

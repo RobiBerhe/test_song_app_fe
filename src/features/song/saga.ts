@@ -3,13 +3,14 @@ import { ADD_SONG, DELETE_SONG, EDIT_SONG, GET_ALBUMS_COUNT, GET_ARTISTS_COUNT, 
 import axios, { AxiosResponse } from "axios";
 import { APP_URL } from "../../app/constants";
 import { put, takeLatest } from "redux-saga/effects";
-import { addSongSuccessAction, deleteSongSuccessAction, editSongSuccessAction, getAlbumsCountSuccess, getArtistsCountSuccess, getGenersCountSuccess, getSongsCountSuccess, getSongsErrorsAction, getSongsSuccessAction } from "./songSlice";
+import { addSongSuccessAction, deleteSongSuccessAction, editSongSuccessAction, getAlbumsCountSuccess, getArtistsCountSuccess, getGenersCountSuccess, getSongsCountSuccess, getSongsErrorsAction, getSongsSuccessAction, setSongsListPagination } from "./songSlice";
 
 
-function* getSongsSaga(_action: PayloadAction<Song[]>) {
+function* getSongsSaga(action: PayloadAction<{ limit: number, page: number }>) {
     try {
-        const response: AxiosResponse<{ songs: Song[] }> = yield axios.get(`${APP_URL}/songs`);
-        yield put(getSongsSuccessAction(response.data.songs))
+        const response: AxiosResponse<{ songs: { docs: Song[], hasNextPage: boolean, hasPrevPage: boolean } }> = yield axios.get(`${APP_URL}/songs/?limit=${action.payload.limit}&page=${action.payload.page}`);
+        yield put(setSongsListPagination({ hasNext: response.data.songs.hasNextPage, hasPrev: response.data.songs.hasPrevPage }))
+        yield put(getSongsSuccessAction(response.data.songs.docs))
     } catch (error) {
         if (Array.isArray(error))
             yield put(getSongsErrorsAction(error))
@@ -28,7 +29,6 @@ function* addSongSaga(action: PayloadAction<Song>) {
 
 function* deleteSongSaga(action: PayloadAction<string>) {
     try {
-        // const response: AxiosResponse<object> = yield axios.delete(`${APP_URL}/songs/${id}`);
         yield axios.delete(`${APP_URL}/songs/${action.payload}`);
         yield put(deleteSongSuccessAction("Song deleted successfully!"));
     } catch (error) {
@@ -39,9 +39,8 @@ function* deleteSongSaga(action: PayloadAction<string>) {
 
 function* editSongSaga(action: PayloadAction<Song>) {
     try {
-        // const response: AxiosResponse<{ song: Song }> = yield axios.post(`${APP_URL}/songs/${action.payload._id}`, { ...action.payload });
         yield axios.put(`${APP_URL}/songs/${action.payload._id}`, { ...action.payload });
-        yield put(editSongSuccessAction("SOng updated successfully!"));
+        yield put(editSongSuccessAction("Song updated successfully!"));
     } catch (error) {
         if (Array.isArray(error))
             yield put(getSongsErrorsAction(error))
@@ -103,18 +102,18 @@ export function* watchEditSong() {
     yield takeLatest(EDIT_SONG, editSongSaga);
 }
 
-export function* watchGetSongsCount(){
-    yield takeLatest(GET_SONGS_COUNT,getSongsCountSaga);
+export function* watchGetSongsCount() {
+    yield takeLatest(GET_SONGS_COUNT, getSongsCountSaga);
 }
 
-export function* watchGetGenresCount(){
-    yield takeLatest(GET_GENRES_COUNT,getGenresCountSaga);
+export function* watchGetGenresCount() {
+    yield takeLatest(GET_GENRES_COUNT, getGenresCountSaga);
 }
 
-export function* watchGetAlbumsCount(){
-    yield takeLatest(GET_ALBUMS_COUNT,getAlbumsCountSaga);
+export function* watchGetAlbumsCount() {
+    yield takeLatest(GET_ALBUMS_COUNT, getAlbumsCountSaga);
 }
 
-export function* watchGetArtistsCount(){
-    yield takeLatest(GET_ARTISTS_COUNT,getArtistsCountSaga);
+export function* watchGetArtistsCount() {
+    yield takeLatest(GET_ARTISTS_COUNT, getArtistsCountSaga);
 }
