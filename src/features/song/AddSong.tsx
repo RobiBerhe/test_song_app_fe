@@ -16,15 +16,12 @@ const FormContainer = styled.div({
 const DivFlexRow = styled.div({
     display: 'flex',
     flexDirection: "row",
-    // padding: "8px",
     width: "100%",
-    // flexGrow: '1',
 });
 const DivFlexCol = styled.div({
     display: 'flex',
     flexDirection: 'column',
     padding: "12px"
-    // alignItems: 'start',
 });
 
 

@@ -14,11 +14,6 @@ import EditSong from "./EditSong"
 
 
 
-// const filterVisibleSongs = (list: Song[], currentIndex: number, endIndex: number) => {
-//     return list.slice(currentIndex, endIndex);
-// }
-
-
 const sortSongs = (list:Song[],sortBy:string)=>{
     const sorted = list.slice().sort((a:Song,b:Song)=> {
         if(sortBy == "artist") return a.artist.localeCompare(b.artist);
@@ -37,38 +32,22 @@ const SongList = () => {
     const dispatch = useAppDispatch();
     const [showSongLength, setShowLength] = useState<number>(5);
     const [page, setPage] = useState<number>(1);
-    // const [nextStop, setNextStop] = useState<number>(showSongLength); //defaults to the no of shown songs
-    // const [totalSeen,setTotalSeen] = useState<number>(showSongLength); //defaults to the no of shown songs
-    // const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [sortBy,setSortBy] = useState<string>("");
     const [deleteModalState,setDeleteModalState] = useState<boolean>(false);
     const [editModalState,setEditModalState] = useState<boolean>(false);
     const [currentSelectedSong,setCurrentSelectedSong] = useState<Song>();
-    // const visibleSongs = useMemo(() => filterVisibleSongs(songList, currentIndex, nextStop), [nextStop, currentIndex,showSongLength,songList])
-    // const sortedSongs = useMemo(()=> sortSongs(visibleSongs,sortBy),[visibleSongs,sortBy]);
     const sortedSongs = useMemo(()=> sortSongs(songList,sortBy),[songList,sortBy]);
 
 
     const onSelectListLength = (ev: React.ChangeEvent<HTMLSelectElement>) => {
         setShowLength(Number.parseInt(ev.target.value));
-        // setNextStop(Number.parseInt(ev.target.value));
-        // setTotalSeen(Number.parseInt(ev.target.value))
-        // setCurrentIndex(0);
     }
 
     const onNext = () => {
-        // setCurrentIndex(totalSeen);
-        // setTotalSeen((prevTotalSeen)=> prevTotalSeen+showSongLength);
-        // setNextStop((prevNextStop) => prevNextStop + showSongLength);
         setPage((prevPage)=> prevPage+1);
     }
 
     const onPrev = () => {
-        // const nxt = totalSeen-showSongLength;
-        // const current = nxt-showSongLength;
-        // setCurrentIndex(current);
-        // setTotalSeen((prevTotalSeen)=> prevTotalSeen-showSongLength);
-        // setNextStop(nxt);
         setPage((prevPage)=> prevPage-1);
     }
 
@@ -92,10 +71,10 @@ const SongList = () => {
                 <Table style={{ borderCollapse: 'collapse', width: "100%" }}>
                     <Thead>
                         <tr>
-                            <th>Title</th>
+                            <th onClick={()=> setSortBy("title")} style={{cursor:"pointer"}}>Title</th>
                             <th onClick={()=> setSortBy("artist")} style={{cursor:"pointer"}}><span style={{display:'flex'}}>Artist <img style={{display:'inline',maxWidth:'13px'}} src={OppositArrow} alt="sort icon" /></span></th>
-                            <th>Album</th>
-                            <th>Genre</th>
+                            <th onClick={()=> setSortBy("album")} style={{cursor:"pointer"}}>Album</th>
+                            <th onClick={()=> setSortBy("genre")} style={{cursor:"pointer"}}>Genre</th>
                             <th>Actions</th>
                         </tr>
                     </Thead>
@@ -125,8 +104,6 @@ const SongList = () => {
                         <option value={25}>25</option>
                         <option value={35}>35</option>
                     </select>
-                    {/* <Button disabled={totalSeen == showSongLength} onClick={()=> onPrev()} m={5}>Prev</Button>
-                    <Button disabled={totalSeen >= songList.length} onClick={() => onNext()} m={5}>Next</Button> */}
                     <Button disabled={!songsListPagination.hasPrev} onClick={()=> onPrev()} m={5}>Prev</Button>
                     <Button disabled={!songsListPagination.hasNext} onClick={() => onNext()} m={5}>Next</Button>
                 </div>

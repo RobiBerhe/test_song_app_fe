@@ -5,19 +5,7 @@ import { SONGS, Song, SongListPagination, SongState } from "./types";
 
 
 const initialState: SongState = {
-    songList: [
-        // { title: "a", artist: "abebe", album: "aa", genre: "pop" }, 
-        // { title: "b", artist: "john", album: "aac", genre: "tizta" },
-        // { title: "c", artist: "ccd", album: "aa", genre: "pop" }, 
-        // { title: "d", artist: "bbac", album: "aac", genre: "tizta" },
-        // { title: "e", artist: "abebe", album: "aa", genre: "pop" }, 
-        // { title: "f", artist: "bhh", album: "aac", genre: "tizta" },
-        // { title: "g", artist: "ccd", album: "aa", genre: "pop" }, 
-        // { title: "h", artist: "tjejrw", album: "aac", genre: "tizta" },
-        // { title: "i", artist: "ccd", album: "aa", genre: "pop" }, 
-        // { title: "j", artist: "john", album: "aac", genre: "tizta" },
-        // { title: "k", artist: "abebe", album: "aa", genre: "pop" }, 
-    ],
+    songList: [],
     isLoading: false,
     errors: [],
     songsListPagination:{
