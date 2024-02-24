@@ -1,12 +1,13 @@
 import AddSongComponent from "./AddSong";
 import SongList from "./SongList";
-
+import './css/song.css'
 
 const Song = () => {
 
     return (
         <>
-            <div style={{display:'flex',flexDirection:'column',flexGrow:1,padding:'56px'}}>
+            {/* style={{display:'flex',flexDirection:'column',flexGrow:1,padding:'56px'}} */}
+            <div className="song-container">
                 <AddSongComponent />
                 <SongList />
             </div>

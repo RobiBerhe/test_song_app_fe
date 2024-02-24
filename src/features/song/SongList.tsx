@@ -67,8 +67,8 @@ const SongList = () => {
 
     return (
         <>
-            <div style={{ display: 'flex',padding:'2px' }}>
-                <Table style={{ borderCollapse: 'collapse', width: "100%" }}>
+            <div style={{ display: 'flex',paddingLeft:'22px',paddingRight:'2px',paddingTop:'10px' }}>
+                <Table style={{ borderCollapse: 'collapse', width: "100%",paddingLeft:"10px" }}>
                     <Thead>
                         <tr>
                             <th onClick={()=> setSortBy("title")} style={{cursor:"pointer"}}>Title</th>

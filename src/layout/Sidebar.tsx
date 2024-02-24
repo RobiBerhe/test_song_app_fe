@@ -4,9 +4,10 @@ import SongsIon from '../assets/songs.svg'
 // import GenreIcon from '../assets/genre_icon.svg'
 // import ArtistIcon from '../assets/artist.svg'
 // import AlbumIcon from '../assets/album_icon.svg'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
+    const {pathname} = useLocation();
     return (
         <aside className="sidebar" style={{}}>
             <div style={{ flexGrow: 1 }}>
@@ -16,14 +17,14 @@ const Sidebar = () => {
                     </span></div>
                 <ul>
                     <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <li>
+                        <li style={pathname == '/' ? {backgroundColor:"#5c5f61",color:"#fff"} : {}}>
                             <span style={{ padding: '5px' }}>
                                 <img src={DashboardIcon} style={{ display: 'inline', verticalAlign: 'middle' }} width={24} alt="" />
                             </span>Dashboard
                         </li>
                     </Link>
                     <Link to="/songs" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <li>
+                        <li style={pathname == '/songs' ? {backgroundColor:"#5c5f61",color:"#fff"} : {}}>
                             <span style={{ padding: '5px' }}>
                                 <img src={SongsIon} style={{ display: 'inline', backgroundColor: 'white', borderRadius: '6px', verticalAlign: 'middle' }} width={24} />
                             </span>

@@ -5,7 +5,7 @@ import './index.css'
 import { Provider } from 'react-redux'
 import store from './app/store.tsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Dashboard from './features/dashboard/Dashbaord.tsx'
+import Dashboard from './features/dashboard/Dashboard.tsx'
 import Song from './features/song/Song.tsx'
 
 

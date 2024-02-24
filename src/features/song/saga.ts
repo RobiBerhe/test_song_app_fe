@@ -1,7 +1,8 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { ADD_SONG, DELETE_SONG, EDIT_SONG, GET_ALBUMS_COUNT, GET_ARTISTS_COUNT, GET_GENRES_COUNT, GET_SONGS, GET_SONGS_COUNT, Song } from "./types";
 import axios, { AxiosResponse } from "axios";
-import { APP_URL } from "../../app/constants";
+// import { APP_URL } from "../../app/constants";
+const APP_URL = import.meta.env.VITE_APP_URL; 
 import { put, takeLatest } from "redux-saga/effects";
 import { addSongSuccessAction, deleteSongSuccessAction, editSongSuccessAction, getAlbumsCountSuccess, getArtistsCountSuccess, getGenersCountSuccess, getSongsCountSuccess, getSongsErrorsAction, getSongsSuccessAction, setSongsListPagination } from "./songSlice";
 
